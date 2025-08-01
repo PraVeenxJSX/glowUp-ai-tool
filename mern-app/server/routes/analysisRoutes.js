@@ -26,7 +26,10 @@ router.post('/analyze', upload.single('faceImage'), async (req, res) => {
       contentType: req.file.mimetype,
     });
 
-    const aiServiceResponse = await axios.post('http://localhost:5000/process-image', form, {
+    // --- THIS IS THE UPDATED LINE ---
+    // It uses the live URL on Render, and falls back to localhost for local development
+    const pythonUrl = process.env.PYTHON_SERVICE_URL || 'http://localhost:5000';
+    const aiServiceResponse = await axios.post(`${pythonUrl}/process-image`, form, {
       headers: { ...form.getHeaders() },
     });
 
@@ -85,7 +88,6 @@ router.post('/refine', async (req, res) => {
             return res.status(400).json({ message: 'Face shape is required to refine results.' });
         }
 
-        // Build a dynamic query to fetch all relevant advice in one go
         const queries = [];
         
         if (hairTexture) {
@@ -100,13 +102,12 @@ router.post('/refine', async (req, res) => {
 
         const results = await Promise.all(queries);
 
-        // --- FIXED: Robustly process results regardless of order ---
         let haircutRec = null;
         let styleGoalRec = null;
         let skincareRec = null;
 
         results.forEach(result => {
-            if (result) { // Ensure the database found a recommendation
+            if (result) {
                 switch (result.category) {
                     case 'haircut_male':
                         haircutRec = result;
