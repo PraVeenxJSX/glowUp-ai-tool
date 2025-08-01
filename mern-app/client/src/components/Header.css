@@ -1,0 +1,59 @@
+.app-header {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--primary);
+  border-radius: 15px;
+  border: 1px solid var(--secondary);
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  background: linear-gradient(90deg, #e94560, #f8b195);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.welcome-user {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.nav-button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background-color: transparent;
+  border: 2px solid var(--secondary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.signup-button {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+.signup-button:hover {
+  background-color: #d43d51;
+  border-color: #d43d51;
+  color: white;
+}
