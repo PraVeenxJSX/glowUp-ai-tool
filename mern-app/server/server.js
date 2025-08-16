@@ -11,8 +11,29 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// --- NEW: CORS Configuration for specific origins ---
+const allowedOrigins = [
+    'http://localhost:3000', // Common React port
+    'http://localhost:5173', // Your current Vite/React port
+    // Add your Vercel URL here when you deploy, e.g., 'https://ai-glowup-tool.vercel.app'
+];
+
+const corsOptions = {
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
+// --- End of NEW Configuration ---
+
+
 app.use(express.json());
 
 // Connect to MongoDB

@@ -1,15 +1,13 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import axios from 'axios';
-import './App.css'; // We can still use the main App.css for styles
+import './App.css';
 
-// --- RefineResults Component ---
 const RefineResults = ({ analysis, onRefine }) => {
     const [hairTexture, setHairTexture] = useState('');
     const [styleGoal, setStyleGoal] = useState('');
     const [skincareConcern, setSkincareConcern] = useState('');
 
     useEffect(() => {
-        // This effect calls the onRefine function whenever a selection changes
         onRefine({
             faceShape: analysis.faceShape,
             hairTexture,
@@ -49,8 +47,6 @@ const RefineResults = ({ analysis, onRefine }) => {
     );
 };
 
-
-// --- Main Advisor Component ---
 function Advisor() {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -135,7 +131,8 @@ function Advisor() {
     if (weight) formData.append('weight', weight);
 
     try {
-      const response = await axios.post('http://localhost:8080/api/analyze', formData);
+      // UPDATED LINE: Using environment variable for the API URL
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/analyze`, formData);
       setInitialResults(response.data);
     } catch (err) {
       setError(err.response?.data?.message || 'An unknown error occurred.');
@@ -144,16 +141,16 @@ function Advisor() {
     }
   };
 
-  // --- FIXED: Wrapped handleRefine in useCallback to prevent infinite loops ---
   const handleRefine = useCallback(async (refineData) => {
     if (!refineData.faceShape) return;
     try {
-      const response = await axios.post('http://localhost:8080/api/refine', refineData);
+      // UPDATED LINE: Using environment variable for the API URL
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/refine`, refineData);
       setRefinedResults(response.data);
     } catch (err) {
       console.error("Refine error:", err);
     }
-  }, []); // Empty dependency array means this function is created only once
+  }, []);
 
   return (
     <div className="App">

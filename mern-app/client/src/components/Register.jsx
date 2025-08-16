@@ -19,7 +19,8 @@ const Register = ({ onLoginSuccess, onNavigate }) => {
     setLoading(true);
     setError('');
     try {
-      const { data } = await axios.post('http://localhost:8080/api/users', { name, email, password });
+      // UPDATED LINE: Using environment variable and corrected endpoint
+      const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/api/users`, { name, email, password });
       onLoginSuccess(data);
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');

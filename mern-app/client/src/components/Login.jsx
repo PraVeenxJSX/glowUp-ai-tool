@@ -13,7 +13,8 @@ const Login = ({ onLoginSuccess, onNavigate }) => {
     setLoading(true);
     setError('');
     try {
-      const { data } = await axios.post('http://localhost:8080/api/users/login', { email, password });
+      // UPDATED LINE: Using environment variable for the API URL
+      const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/login`, { email, password });
       onLoginSuccess(data);
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');
